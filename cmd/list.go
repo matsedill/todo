@@ -20,7 +20,7 @@ var listCmd = &cobra.Command{
 }
 
 func listRun(cmd *cobra.Command, args []string) {
-	var items []todos.Item = todos.GetItems(todos.GetLocation())
+	var items []todos.Item = todos.GetItems(rootCmd.PersistentFlags().Lookup("dataFile").Value.String())
 	fmt.Println("-")
 	for _, item := range items {
 		fmt.Println("[ ]", item.Text)

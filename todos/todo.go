@@ -7,7 +7,18 @@ import (
 )
 
 type Item struct {
-	Text string
+	Text  string
+	Done  bool
+	Index int
+}
+
+func AddItems(args []string, dataFile string) []Item {
+	todos := GetItems(dataFile)
+	for _, x := range args {
+		todos = append(todos, Item{Text: x})
+	}
+	SaveItems(dataFile, todos)
+	return todos
 }
 
 func SaveItems(filename string, items []Item) {
@@ -24,7 +35,7 @@ func SaveItems(filename string, items []Item) {
 func GetItems(filename string) []Item {
 	marshal, err := os.ReadFile(filename)
 	if err != nil {
-		log.Fatal(err)
+		return []Item{}
 	}
 	var items []Item
 	err = json.Unmarshal(marshal, &items)
@@ -34,10 +45,24 @@ func GetItems(filename string) []Item {
 	return items
 }
 
-func GetLocation() string {
-	dataFile, err := os.UserHomeDir()
+// func CheckItems(args []string, dataFile string) {
+// 	todos := GetItems(dataFile)
+// 	if len(args) == 0 {
+// 		todos[0].Done = true
+// 	} else {
+// 		for _, todo := range todos {
+// 			for _, index := range
+// 			if i == todo.Index {
+// 				todo.Done = true
+// 			}
+// 		}
+// 	}
+// 	fmt.Println(todos)
+// }
+
+func ClearItems(filename string) {
+	err := os.WriteFile(filename, []byte("[]"), 0644)
 	if err != nil {
-		log.Fatal("Could not locate User Home Directory")
+		log.Fatal("Unable to Clear list")
 	}
-	return dataFile + string(os.PathSeparator) + ".todos.json"
 }

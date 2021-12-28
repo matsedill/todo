@@ -22,12 +22,9 @@ var addCmd = &cobra.Command{
 }
 
 func addRun(cmd *cobra.Command, args []string) {
-	newTodos := []todos.Item{}
-	for _, x := range args {
-		newTodos = append(newTodos, todos.Item{Text: x})
-	}
-	fmt.Println("Adding on to the pile...")
-	todos.SaveItems(todos.GetLocation(), newTodos)
+	dataFile := rootCmd.PersistentFlags().Lookup("dataFile").Value.String()
+	todos.AddItems(args, dataFile)
+	fmt.Println("Consider it added to the list")
 }
 
 func init() {
